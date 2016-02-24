@@ -8,3 +8,5 @@ TODO
 -Output to an *.html file instead of stdout
 
 -Take arguments from the command line that will specify the file to run on, path to volatility etc 
+
+-Get the list of valid profiles from volatility 
