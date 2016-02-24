@@ -2,17 +2,22 @@
 
 import os
 import subprocess
-
+import fileinput
+from shutil import copyfile
 
 def main():
     cmdpath = "volatility"
     target = "zeus.vmem"
-    commands = ["pslist"]
+    commands = ["pslist", "pstree","cmdscan", "consoles", "connections", "sockets", "sockscan","netscan", "hivelist", "hashdump", "lsadump"]
+    text = ""
 
     profiles = parseInfo(findInfo(cmdpath, "imageinfo", target))
 
     for cmd in commands:
-        print(run(cmdpath, profiles[0], cmd, target))
+        text += "<h3 style=\"text-align: left;\">" + cmd + "</h3> \n"
+        text += "<pre>" + run(cmdpath, profiles[0], cmd, target) + "</pre> \n"
+
+    writeHTML(text , target)
 
     print("Done!")
 
@@ -34,6 +39,17 @@ def findInfo(cmdpath, command, target):
         output += str(line)
     return output
 
+def writeHTML(text, target):
+    copy(target)
+
+    with fileinput.FileInput(target + "_report.html", inplace=True, backup='.bak') as file:
+        for line in file:
+            print(line.replace("MAGIC", text), end='')
+
+
+def copy(target):
+    copyfile("report.html", target + "_report.html")
+
 def parseInfo(info):
     output = []
     profiles = "VistaSP0x64 VistaSP0x86 VistaSP1x64 VistaSP1x86 VistaSP2x64 VistaSP2x86 Win10x64 Win10x86 Win2003SP0x86 Win2003SP1x64 Win2003SP1x86 Win2003SP2x64 Win2003SP2x86 Win2008R2SP0x64 Win2008R2SP1x64 Win2008SP1x64 Win2008SP1x86 Win2008SP2x64 Win2008SP2x86 Win2012R2x64 Win2012x64 Win7SP0x64 Win7SP0x86 Win7SP1x64 Win7SP1x86 Win81U1x64 Win81U1x86 Win8SP0x64 Win8SP0x86 Win8SP1x64 Win8SP1x86 WinXPSP1x64 WinXPSP1x86 WinXPSP2x64 WinXPSP2x86 WinXPSP3x86".split()
@@ -47,4 +63,3 @@ def parseInfo(info):
     return output
 
 main()
-
