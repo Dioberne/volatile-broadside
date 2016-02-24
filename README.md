@@ -5,7 +5,7 @@ There are many commands that will be run in most investigations. This script run
 
 TO-DO:
 
--Output to an *.html file instead of stdout
+-Make the HTML/CSS report pretty and colorful 
 
 -Take arguments from the command line that will specify the file to run on, path to volatility etc 
 
