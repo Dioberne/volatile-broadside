@@ -3,18 +3,17 @@
 import os
 import subprocess
 import fileinput
-from shutil import copyfile
 
 def main():
     cmdpath = "volatility"
     target = "zeus.vmem"
-    commands = ["pslist", "pstree","cmdscan", "consoles", "connections", "sockets", "sockscan","netscan", "hivelist", "hashdump", "lsadump"]
+    commands = ["pslist", "psscan", "pstree","cmdscan", "consoles", "connections", "sockets", "sockscan","netscan", "hivelist", "hashdump", "lsadump"]
     text = ""
 
     profiles = parseInfo(findInfo(cmdpath, "imageinfo", target))
 
     for cmd in commands:
-        text += "<h3 style=\"text-align: left;\">" + cmd + "</h3> \n"
+        text += "<h3>" + cmd + "</h3> \n"
         text += "<pre>" + run(cmdpath, profiles[0], cmd, target) + "</pre> \n"
 
     writeHTML(text , target)
@@ -40,15 +39,16 @@ def findInfo(cmdpath, command, target):
     return output
 
 def writeHTML(text, target):
-    copy(target)
+    f = open("report.html",'r')
+    filedata = f.read()
+    f.close()
 
-    with fileinput.FileInput(target + "_report.html", inplace=True, backup='.bak') as file:
-        for line in file:
-            print(line.replace("MAGIC", text), end='')
+    newdata = filedata.replace("MAGIC",text)
+    newdata = newdata.replace("FILE",target)
 
-
-def copy(target):
-    copyfile("report.html", target + "_report.html")
+    f = open(target + "_report.html",'w')
+    f.write(newdata)
+    f.close()
 
 def parseInfo(info):
     output = []
