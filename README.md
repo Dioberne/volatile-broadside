@@ -7,6 +7,6 @@ TO-DO:
 
 -Make the HTML/CSS report pretty and colorful 
 
--Take arguments from the command line that will specify the file to run on, path to volatility etc 
+-Add support for Gnu/Linux memory images 
 
 -Get the list of valid profiles from volatility 
